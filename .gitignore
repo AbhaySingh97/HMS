@@ -26,5 +26,9 @@ server/.env
 client/.env
 client/.env.local
 
+
 # Vercel
 .vercel
+
+# Private Deployment Reference
+DEPLOYMENT_REFERENCE.md
