@@ -8,8 +8,11 @@ const errorHandler = require('./middleware/error');
 
 const app = express();
 
-// Connect to Database
-connectDB();
+// Connect to Database only when running as a standalone server.
+// In serverless environments (Vercel functions) we avoid connecting
+// at import time to prevent runtime failures during cold starts
+// when environment variables may not be available. Routes that
+// require the DB should ensure a connection exists before DB ops.
 
 // Middleware
 app.use(helmet());
@@ -37,6 +40,9 @@ app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
 
 if (require.main === module) {
+    // Only connect when running the server as a persistent process
+    connectDB();
+
     app.listen(PORT, () => {
         console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
     });
